@@ -139,9 +139,11 @@ for d in range(model.latent_dim):
 slider_values = []
 for d in range(model.latent_dim):
     lo, hi = latent_ranges[d]
+    # Compute an adaptive step: ~1/100th of the range, bounded to [0.01, 0.5]
+    adaptive_step = round(min(max((hi - lo) / 100, 0.01), 0.5), 4)
     val = st.sidebar.slider(
-        f"z[{d}]", min_value=float(f"{lo:.2f}"), max_value=float(f"{hi:.2f}"),
-        value=0.0, step=0.1, key=f"slider_{d}"
+        f"z[{d}]", min_value=lo, max_value=hi,
+        value=0.0, step=adaptive_step, key=f"slider_{d}", format="%.3f"
     )
     slider_values.append(val)
 
